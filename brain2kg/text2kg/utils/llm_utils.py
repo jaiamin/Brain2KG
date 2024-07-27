@@ -6,32 +6,28 @@ def parse_raw_triplets(raw_triplets: str):
     try:
         structured_triplets = ast.literal_eval(raw_triplets)
     except Exception as e:
+        print('------')
         print(raw_triplets)
         print(str(e))
         print('ERROR!')
     
-    print('----------')
-    print('RAW:')
-    print(raw_triplets)
-    print('----------')
     return structured_triplets
 
-def parse_relation_definition(raw_definitions: str):
+def parse_relation_definition(raw_definitions: str, relations: list[str]):
     descriptions = raw_definitions.split('\n')
     relation_definitions_dict = {}
 
-    for description in descriptions:
+    for idx, description in enumerate(descriptions):
         if ':' not in description:
             continue
         index_of_colon = description.index(':')
-        relation = description[:index_of_colon].strip()
-
         relation_description = description[index_of_colon + 1 :].strip()
 
-        relation_definitions_dict[relation] = relation_description
+        try:
+            relation_definitions_dict[relations[idx]] = relation_description
+        except IndexError:
+            print('------')
+            print(raw_definitions)
+            print('ERROR!')
     
-    print('----------')
-    print('RAW:')
-    print(raw_definitions)
-    print('----------')
     return relation_definitions_dict

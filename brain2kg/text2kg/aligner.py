@@ -75,14 +75,6 @@ class SchemaAligner:
             model=self.verifier_model,
             messages=messages,
         )['message']['content']
-
-        print('----------')
-        print('RAW:')
-        print(verification_result)
-        print('----------')
-        print('CHOICES')
-        print(choices)
-        print('----------')
         
         letter = verification_result.split('\n')[0][0].upper()
         if letter.strip() in choice_letters_list:

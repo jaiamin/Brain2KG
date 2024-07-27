@@ -42,5 +42,5 @@ class SchemaDefiner:
             model=self.model,
             messages=messages,
         )['message']['content']
-        relation_definition_dict = parse_relation_definition(completion)
+        relation_definition_dict = parse_relation_definition(completion, list(relations_present))
         return relation_definition_dict
