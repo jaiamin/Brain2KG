@@ -4,7 +4,7 @@
 
 1. OIE - Open Information Extraction
 2. SD - Schema Definition
-3. TA - Target Alignment
+3. SA - Schema Alignment
 
 ### ToDo
 

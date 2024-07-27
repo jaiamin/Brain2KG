@@ -1,4 +1,4 @@
-You will be given a piece of text and a list of relational triples in the format of [Subject, Relation, Object] extracted from the text. For each relation present in the triples, your task is to write a description to express the meaning of the relation. In your answer, please strictly only include the relation and description pairs and do not include any explanation or apologies.
+You will be given a piece of text and a list of relational triples in the format of [Subject, Relation, Object] extracted from the text. For each relation present in the triples, your task is to write a description to express the meaning of the relation. In your answer, please strictly only include the exact provided relation and description pairs and do not include any explanation or apologies.
 
 Here are some examples:
 {few_shot_examples}

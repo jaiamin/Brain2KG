@@ -130,9 +130,9 @@ class EDA:
                 aligned_triplet = self.aligner.llm_verify(
                     input_text_list[idx],
                     oie_triplet,
-                    schema_definition_dict_list[idx],
+                    schema_definition_dict_list[idx][oie_triplet[1]],
                     schema_aligner_prompt_template_str,
-                    schema_definition_relevant_relations_list[idx]
+                    schema_definition_relevant_relations_list[idx][0]
                 )
                 if aligned_triplet is not None:
                     aligned_triplets.append(aligned_triplet)

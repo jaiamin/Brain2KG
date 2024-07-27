@@ -1,0 +1,2 @@
+[['Alan_Shepard', 'director', 'NASA'], ['Alan_Shepard', 'president', '1959']]
+[['Alan_Shepard', 'birthDate', 'Apollo_14']]
