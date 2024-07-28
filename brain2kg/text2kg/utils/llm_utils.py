@@ -16,7 +16,9 @@ def parse_raw_triplets(raw_triplets: str):
     except Exception as e:
         logger.error(str(e))
         return None
-        
+    
+    for triplet in structured_triplets:
+        assert len(triplet) == 3
     return structured_triplets
 
 def parse_relation_definition(raw_definitions: str, relations: list[str]):

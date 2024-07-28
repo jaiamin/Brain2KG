@@ -82,6 +82,7 @@ class SchemaAligner:
             messages=messages,
         )['message']['content']
 
+        logger.debug(f'VERIFICATION PROMPT: {verification_prompt}')
         logger.debug(f'RAW OUTPUT: {verification_result}')
         letter = verification_result.split('\n')[0][0].upper().strip()
         logger.debug(f'STRUCTURED: {letter}')
