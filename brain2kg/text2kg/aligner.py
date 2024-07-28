@@ -4,6 +4,10 @@ import numpy as np
 
 from sentence_transformers import SentenceTransformer
 
+from brain2kg import get_logger
+
+logger = get_logger(__name__)
+
 
 class SchemaAligner:
     def __init__(self, target_schema_dict: dict, embedding_model_str: str, verifier_model_str: str):
@@ -33,11 +37,13 @@ class SchemaAligner:
         scores = np.array([query_embedding]) @ np.array(target_relation_embedding_list).T
         scores = scores[0]
         highest_scores_indices = np.argsort(-scores)
-
-        return {
+        
+        output = {
             target_relation_list[idx]: self.target_schema_dict[target_relation_list[idx]]
             for idx in highest_scores_indices[:top_k]
         }, [scores[idx] for idx in highest_scores_indices[:top_k]]
+        logger.debug(f'RELEVANT RELATIONS: {output}')
+        return output
     
     def llm_verify(
         self,
@@ -75,11 +81,14 @@ class SchemaAligner:
             model=self.verifier_model,
             messages=messages,
         )['message']['content']
-        
-        letter = verification_result.split('\n')[0][0].upper()
-        if letter.strip() in choice_letters_list:
+
+        logger.debug(f'RAW OUTPUT: {verification_result}')
+        letter = verification_result.split('\n')[0][0].upper().strip()
+        logger.debug(f'STRUCTURED: {letter}')
+        if letter in choice_letters_list:
             canonicalized_triplet[1] = candidate_relations[choice_letters_list.index(verification_result[0])]
         else:
             return None
         
+        logger.debug(f'FINAL TRIPLET: {canonicalized_triplet}')
         return canonicalized_triplet

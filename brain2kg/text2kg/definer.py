@@ -1,5 +1,9 @@
 import ollama
+
+from brain2kg import get_logger
 from brain2kg.text2kg.utils.llm_utils import parse_relation_definition
+
+logger = get_logger(__name__)
 
 
 class SchemaDefiner:
@@ -42,5 +46,7 @@ class SchemaDefiner:
             model=self.model,
             messages=messages,
         )['message']['content']
+        logger.debug(f'RAW OUTPUT: {completion}')
         relation_definition_dict = parse_relation_definition(completion, list(relations_present))
+        logger.debug(f'STRUCTURED: {relation_definition_dict}')
         return relation_definition_dict

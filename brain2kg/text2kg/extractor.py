@@ -1,5 +1,9 @@
 import ollama
+
+from brain2kg import get_logger
 from brain2kg.text2kg.utils.llm_utils import parse_raw_triplets
+
+logger = get_logger(__name__)
 
 
 class TripletExtractor:
@@ -31,5 +35,7 @@ class TripletExtractor:
             model=self.model,
             messages=messages,
         )['message']['content']
+        logger.debug(f'RAW OUTPUT: {completion}')
         extracted_triplets_list = parse_raw_triplets(completion)
+        logger.debug(f'STRUCTURED: {extracted_triplets_list}')
         return extracted_triplets_list

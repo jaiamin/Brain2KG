@@ -1,16 +1,21 @@
 import os
 import csv
+import copy
 import pathlib
 
 import nltk
 nltk.download('punkt')
 from nltk.tokenize import sent_tokenize
 
-from tqdm import tqdm 
+from tqdm import tqdm
+from brain2kg import get_logger
 
+from brain2kg.text2kg.utils.text_utils import preprocess_text
 from brain2kg.text2kg.extractor import TripletExtractor
 from brain2kg.text2kg.definer import SchemaDefiner
 from brain2kg.text2kg.aligner import SchemaAligner
+
+logger = get_logger(__name__)
 
 
 class EDA:
@@ -41,12 +46,15 @@ class EDA:
 
         # EDA initialization
         extractor = TripletExtractor(model=self.oie_llm_name)
+        logger.info('Extractor initialized.')
         definer = SchemaDefiner(model=self.sd_llm_name)
+        logger.info('Definer initialized.')
         aligner = SchemaAligner(
             target_schema_dict=self.target_schema_dict,
             embedding_model_str=self.sa_embedding_model_name,
             verifier_model_str=self.sa_verifier_llm_name
         )
+        logger.info('Aligner initialized.')
 
         self.extractor = extractor
         self.definer = definer
@@ -56,15 +64,18 @@ class EDA:
         self,
         input_raw_text: str,
         output_dir: str = None,
-        detail_log=False,
     ):
         if output_dir is not None:
             pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
 
         output_kg_list = []
 
+        # preprocess text
+        input_raw_text = preprocess_text(input_raw_text)
+
         # sentence tokenize input text
         sentences = sent_tokenize(input_raw_text)
+        logger.info('Input text sentence tokenized.')
 
         # EDA run
         oie_triplets, schema_definition_dict_list, aligned_triplets_list = self._extract_kg_helper(sentences)
@@ -87,7 +98,7 @@ class EDA:
         
         oie_prompt_template_str = open(self.oie_prompt_template_file_path).read()
         oie_few_shot_examples_str = open(self.oie_few_shot_example_file_path).read()
-        for idx in tqdm(range(len(input_text_list))):
+        for idx in tqdm(range(len(input_text_list)), desc='Extracting'):
             input_text = input_text_list[idx]
             oie_triplets = self.extractor.extract(
                 input_text,
@@ -95,6 +106,7 @@ class EDA:
                 oie_few_shot_examples_str,
             )
             oie_triplets_list.append(oie_triplets)
+        logger.info('All sentences extracted.')
 
         schema_definition_dict_list = []
         schema_definition_few_shot_prompt_template_str = open(self.sd_template_file_path).read()
@@ -103,7 +115,7 @@ class EDA:
         schema_definition_relevant_relations_list = []
 
         # define the relations in the induced open schema
-        for idx, oie_triplets in enumerate(tqdm(oie_triplets_list)):
+        for idx, oie_triplets in enumerate(tqdm(oie_triplets_list, desc='Defining')):
             schema_definition_dict = self.definer.define_schema(
                 input_text_list[idx],
                 oie_triplets,
@@ -118,13 +130,14 @@ class EDA:
                     top_k=5,
                 )
                 schema_definition_relevant_relations_list.append(schema_definition_relevant_relations)
+        logger.info('All sentences defined and relations found.')
 
 
         schema_aligner_prompt_template_str = open(self.sa_template_file_path).read()
 
         # Target Alignment
         aligned_triplets_list = []
-        for idx, oie_triplets in enumerate(tqdm(oie_triplets_list)):
+        for idx, oie_triplets in enumerate(tqdm(oie_triplets_list, desc='Aligning')):
             aligned_triplets = []
             for oie_triplet in oie_triplets:
                 aligned_triplet = self.aligner.llm_verify(
@@ -137,5 +150,6 @@ class EDA:
                 if aligned_triplet is not None:
                     aligned_triplets.append(aligned_triplet)
             aligned_triplets_list.append(aligned_triplets)
+        logger.info('All sentences aligned.')
 
         return oie_triplets_list, schema_definition_dict_list, aligned_triplets_list

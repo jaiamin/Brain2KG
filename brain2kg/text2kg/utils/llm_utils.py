@@ -1,16 +1,22 @@
 import ast
 
+from brain2kg import get_logger
+
+logger = get_logger(__name__)
+
 
 def parse_raw_triplets(raw_triplets: str):
     raw_triplets.replace('"', '')
+    while raw_triplets and not raw_triplets.startswith('['):
+        raw_triplets = raw_triplets[1:]
+    while raw_triplets and not raw_triplets.endswith(']'):
+        raw_triplets = raw_triplets[:-1]
     try:
         structured_triplets = ast.literal_eval(raw_triplets)
     except Exception as e:
-        print('------')
-        print(raw_triplets)
-        print(str(e))
-        print('ERROR!')
-    
+        logger.error(str(e))
+        return None
+        
     return structured_triplets
 
 def parse_relation_definition(raw_definitions: str, relations: list[str]):
@@ -25,9 +31,8 @@ def parse_relation_definition(raw_definitions: str, relations: list[str]):
 
         try:
             relation_definitions_dict[relations[idx]] = relation_description
-        except IndexError:
-            print('------')
-            print(raw_definitions)
-            print('ERROR!')
+        except Exception as e:
+            logger.error(str(e))
+            return None
     
     return relation_definitions_dict

@@ -1,2 +1,1 @@
-[['Ciudad_Ayala', 'isPartOf', 'Morelos'], ['Ciudad_Ayala', 'isPartOf', '1604.0'], ['Ciudad_Ayala', 'isPartOf', '1777539'], ['Ciudad_Ayala', 'isPartOf', '-6']]
-[['Ciudad_Ayala', 'populationMetro', 'Council-manager_government'], ['City_Manager', 'populationDensity', '"City Manager"']]
+[['Hypermarcas', 'discovered', 'January_1,_2001'], ['Hypermarcas', 'foundingDate', 'pharmaceutical_company']]
