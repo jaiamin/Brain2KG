@@ -32,8 +32,11 @@ def parse_raw_triplets(raw_triplets: str):
             assert len(triplet) == 3
         except AssertionError:
             logger.error('Triplet does not contain exactly 3 elements.')
-            logger.debug(f'INCORRECT TRIPLET: {triplet}')
-            return None
+            raw_triplets = _fallback_triplet_parser(raw_triplets)
+            logger.debug(f'INCORRECT TRIPLET (2ND FALLBACK): {triplet}')
+            structured_triplets = ast.literal_eval(raw_triplets)
+            break
+
     return structured_triplets
 
 def _fallback_triplet_parser(incorrect_raw_triplets: str):
@@ -42,6 +45,7 @@ def _fallback_triplet_parser(incorrect_raw_triplets: str):
     return raw_triplets
 
 def parse_relation_definition(raw_definitions: str, relations: set[str]) -> dict:
+    raw_definitions = _clean_definition_text(raw_definitions)
     descriptions = raw_definitions.split('\n')
     relation_definitions_dict = {}
 
@@ -87,3 +91,6 @@ def parse_relation_definition(raw_definitions: str, relations: set[str]) -> dict
             return None
     
     return relation_definitions_dict
+
+def _clean_definition_text(text: str):
+    return ''.join(char for char in text if char.isalpha() or char in ': .\n')
