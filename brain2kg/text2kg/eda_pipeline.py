@@ -132,7 +132,6 @@ class EDA:
                 schema_definition_relevant_relations_dict[relation] = schema_definition_relevant_relations
         logger.info('All sentences defined and relations found.')
 
-
         schema_aligner_prompt_template_str = open(self.sa_template_file_path).read()
 
         # Target Alignment
@@ -141,13 +140,18 @@ class EDA:
             aligned_triplets = []
             for oie_triplet in oie_triplets:
                 relation = oie_triplet[1]
-                aligned_triplet = self.aligner.llm_verify(
-                    input_text_list[idx],
-                    oie_triplet,
-                    schema_definition_dict_list[idx][relation],
-                    schema_aligner_prompt_template_str,
-                    schema_definition_relevant_relations_dict[relation][0]
-                )
+
+                # if relation is exact match with any relevant relation, no need to llm_verify
+                if relation in schema_definition_relevant_relations_dict[relation][0].keys():
+                    aligned_triplet = [oie_triplet[0], relation, oie_triplet[2]]
+                else:
+                    aligned_triplet = self.aligner.llm_verify(
+                        input_text_list[idx],
+                        oie_triplet,
+                        schema_definition_dict_list[idx][relation],
+                        schema_aligner_prompt_template_str,
+                        schema_definition_relevant_relations_dict[relation][0]
+                    )
                 if aligned_triplet is not None:
                     aligned_triplets.append(aligned_triplet)
             aligned_triplets_list.append(aligned_triplets)

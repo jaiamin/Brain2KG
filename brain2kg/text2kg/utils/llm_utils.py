@@ -41,6 +41,7 @@ def parse_relation_definition(raw_definitions: str, relations: set[str]) -> dict
         # else:
         #     relation = relation[:1].lower() + relation[1:]
 
+        # handle incorrect LLM output for relation camelcase naming convention
         relation = relation.replace(' ', '')
         for rel in relations:
             if rel.lower() == relation.lower():
