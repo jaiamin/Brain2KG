@@ -11,6 +11,8 @@ nltk = "^3.8.1"
 sentence-transformers = "^3.0.1"
 numpy = "^2.0.1"
 ollama = "^0.3.0"
+matplotlib = "^3.9.1"
+networkx = "^3.3"
 
 
 [tool.poetry.group.dev.dependencies]
