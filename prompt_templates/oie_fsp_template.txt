@@ -1,4 +1,4 @@
-Your task is to transform the given text into a semantic graph in the form of a list of triples. The triples must be in the form of [Entity1, Relationship, Entity2]. In your answer, please strictly only include the triplets and do not include any other text, explanation or apologies.
+Your task is to transform the given text into a semantic graph in the form of a list of triples. Each triple must be in the form of [Entity1, Relationship, Entity2] and the output must always be a list of triples (list of lists). In your answer, please strictly only include the triplets and do not include any other text, explanation or apologies. Do not include any characters (including spaces) besides underscores in your triplet strings.
 
 Here are some examples:
 {few_shot_examples}
