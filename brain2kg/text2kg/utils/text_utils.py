@@ -1,7 +1,6 @@
-
+import re
 
 def preprocess_text(text: str):
     # remove quotations (single and double)
-    text = text.replace('\'', '')
-    text = text.replace('"', '')
+    text = re.sub(r'["\']', '', text)
     return text

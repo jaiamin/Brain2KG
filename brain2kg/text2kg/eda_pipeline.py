@@ -68,6 +68,9 @@ class EDA:
         if output_dir is not None:
             pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
 
+        if not input_raw_text:
+            raise ValueError('A input text path must be provided.')
+
         output_kg_list = []
 
         # preprocess text

@@ -8,7 +8,10 @@ logger = get_logger(__name__)
 
 def parse_raw_triplets(raw_triplets: str):
     # handle regular incorrect LLM outputs
-    raw_triplets = re.sub(r'[ "]', '', raw_triplets)
+    raw_triplets = raw_triplets.replace(' ', '') # remove spaces
+    raw_triplets = raw_triplets.replace('"', "'") # replace double with single quotes
+    inner_string_pattern = r"(?<!\[)(?<!',)\'(?!,')(?!\])"
+    raw_triplets = re.sub(inner_string_pattern, '', raw_triplets) # remove inner string quotes
     while raw_triplets and not raw_triplets.startswith('['):
         raw_triplets = raw_triplets[1:]
     while raw_triplets and not raw_triplets.endswith(']'):

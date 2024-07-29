@@ -3,7 +3,7 @@ You will be given a piece of text and a list of relational triples in the format
 Here are some examples (pay attention to answer structure and format):
 {few_shot_examples}
 
-Now please extract relation descriptions given the following text and triples. Note that the description needs to be general and can be used to describe relations between other entities as well. Pay attention to the order of subject and object entities. MAKE SURE that each relation is printed exactly as provided. 
+Now please extract relation descriptions given the following text and triples. Note that the description needs to be general and can be used to describe relations between other entities as well. Pay attention to the order of subject and object entities. ENSURE that the relations in your answer exactly match (exact letters, numbers, characters) the provided Relations. 
 Text: {text}
 Triples: {triples}
 Relations: {relations}
