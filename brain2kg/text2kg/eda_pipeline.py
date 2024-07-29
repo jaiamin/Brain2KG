@@ -112,7 +112,7 @@ class EDA:
         schema_definition_few_shot_prompt_template_str = open(self.sd_template_file_path).read()
         schema_definition_few_shot_examples_str = open(self.sd_few_shot_example_file_path).read()
 
-        schema_definition_relevant_relations_list = []
+        schema_definition_relevant_relations_dict = {}
 
         # define the relations in the induced open schema
         for idx, oie_triplets in enumerate(tqdm(oie_triplets_list, desc='Defining')):
@@ -124,12 +124,12 @@ class EDA:
             )
             schema_definition_dict_list.append(schema_definition_dict)
 
-            for _, relation_definition in schema_definition_dict.items():
+            for relation, relation_definition in schema_definition_dict.items():
                 schema_definition_relevant_relations = self.aligner.retrieve_relevant_relations(
                     relation_definition,
                     top_k=5,
                 )
-                schema_definition_relevant_relations_list.append(schema_definition_relevant_relations)
+                schema_definition_relevant_relations_dict[relation] = schema_definition_relevant_relations
         logger.info('All sentences defined and relations found.')
 
 
@@ -140,12 +140,13 @@ class EDA:
         for idx, oie_triplets in enumerate(tqdm(oie_triplets_list, desc='Aligning')):
             aligned_triplets = []
             for oie_triplet in oie_triplets:
+                relation = oie_triplet[1]
                 aligned_triplet = self.aligner.llm_verify(
                     input_text_list[idx],
                     oie_triplet,
-                    schema_definition_dict_list[idx][oie_triplet[1]],
+                    schema_definition_dict_list[idx][relation],
                     schema_aligner_prompt_template_str,
-                    schema_definition_relevant_relations_list[idx][0]
+                    schema_definition_relevant_relations_dict[relation][0]
                 )
                 if aligned_triplet is not None:
                     aligned_triplets.append(aligned_triplet)

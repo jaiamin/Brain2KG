@@ -3,7 +3,7 @@ You will be given a piece of text and a list of relational triples in the format
 Here are some examples:
 {few_shot_examples}
 
-Now please extract relation descriptions given the following text and triples. Note that the description needs to be general and can be used to describe relations between other entities as well. Pay attention to the order of subject and object entities.
+Now please extract relation descriptions given the following text and triples. Note that the description needs to be general and can be used to describe relations between other entities as well. Pay attention to the order of subject and object entities. Print each relation exactly as given in camelcase naming convention. 
 Text: {text}
 Triples: {triples}
 Relations: {relations}

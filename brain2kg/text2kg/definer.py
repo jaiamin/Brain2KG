@@ -19,16 +19,15 @@ class SchemaDefiner:
             few_shot_examples_str: str = None,
     ) -> list[list[str]]:
         
-        relations_present = []
+        relations_present = set()
         for t in extracted_triplets_list:
-            relations_present.append(t[1])
-        relations_present_set = set(relations_present)
+            relations_present.add(t[1])
         
         if not few_shot_examples_str:
             filled_prompt = prompt_template_str.format_map(
                 {
                     'text': input_text_str,
-                    'relations': relations_present_set,
+                    'relations': relations_present,
                     'triples': extracted_triplets_list,
                 }
             )
@@ -37,7 +36,7 @@ class SchemaDefiner:
                 {
                     'few_shot_examples': few_shot_examples_str,
                     'text': input_text_str,
-                    'relations': relations_present_set,
+                    'relations': relations_present,
                     'triples': extracted_triplets_list,
                 }
             )
