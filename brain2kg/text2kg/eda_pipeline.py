@@ -75,6 +75,7 @@ class EDA:
             input_raw_text = open(input_text_file_path, 'r').read()
         elif file_extension == '.pdf':
             input_raw_text = pdf_to_text(input_text_file_path)
+            logger.debug(f'PDF EXTRACTED TEXT: {input_raw_text}')
         else:
             raise ValueError('Input text file path must be a supported type.')
 
