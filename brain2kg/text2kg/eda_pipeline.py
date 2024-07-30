@@ -1,6 +1,5 @@
 import os
 import csv
-import copy
 import pathlib
 
 import nltk
@@ -10,7 +9,7 @@ from nltk.tokenize import sent_tokenize
 from tqdm import tqdm
 from brain2kg import get_logger
 
-from brain2kg.text2kg.utils.text_utils import preprocess_text
+from brain2kg.text2kg.utils.text_utils import preprocess_text, pdf_to_text
 from brain2kg.text2kg.extractor import TripletExtractor
 from brain2kg.text2kg.definer import SchemaDefiner
 from brain2kg.text2kg.aligner import SchemaAligner
@@ -62,16 +61,22 @@ class EDA:
 
     def extract_kg(
         self,
-        input_raw_text: str,
+        input_text_file_path: str,
         output_dir: str = None,
     ):
         if output_dir is not None:
             pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
-
-        if not input_raw_text:
-            raise ValueError('A input text path must be provided.')
-
-        output_kg_list = []
+        if not input_text_file_path:
+            raise ValueError('Input text file path must be provided.')
+        
+        _, file_extension = os.path.splitext(input_text_file_path)
+        file_extension = file_extension.lower()
+        if file_extension == '.txt':
+            input_raw_text = open(input_text_file_path, 'r').read()
+        elif file_extension == '.pdf':
+            input_raw_text = pdf_to_text(input_text_file_path)
+        else:
+            raise ValueError('Input text file path must be a supported type.')
 
         # preprocess text
         input_raw_text = preprocess_text(input_raw_text)
@@ -80,6 +85,7 @@ class EDA:
         sentences = sent_tokenize(input_raw_text)
         logger.info('Input text sentence tokenized.')
 
+        output_kg_list = []
         # EDA run
         oie_triplets, schema_definition_dict_list, aligned_triplets_list = self._extract_kg_helper(sentences)
         output_kg_list.append(oie_triplets)

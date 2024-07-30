@@ -16,10 +16,11 @@ def parse_raw_triplets(raw_triplets: str):
         raw_triplets = raw_triplets[1:]
     while raw_triplets and not raw_triplets.endswith(']'):
         raw_triplets = raw_triplets[:-1]
-    if not raw_triplets.startswith('[['):
-        raw_triplets = '[[' + raw_triplets[1:]
-    if not raw_triplets.endswith(']]'):
-        raw_triplets = raw_triplets[:-1] + ']]'
+    raw_triplets_len = len(raw_triplets)
+    if raw_triplets_len > 2 and not raw_triplets.startswith("[['"):
+        raw_triplets = re.sub(r"^\[\[*'", "[['", raw_triplets)
+    if raw_triplets_len > 2 and not raw_triplets.endswith("']]"):
+        raw_triplets = re.sub(r"'\]*\]$", "']]", raw_triplets)
 
     logger.debug(f'PARSED TRIPLET (REGULAR): {raw_triplets}')
     try:

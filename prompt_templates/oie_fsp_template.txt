@@ -1,4 +1,4 @@
-Your task is to transform the given text into a semantic graph in the form of a list of triples. Each triple must be in the form of [Entity1, Relationship, Entity2]. In your answer, DO NOT include any other text, explanation or apologies. Enclose each triplet string in single quotes, ensuring NO internal single or double quotes.
+Your task is to transform the given text into a semantic graph in the form of a list of triples. Each triple must be in the form of [Entity1, Relationship, Entity2]. In your answer, DO NOT include any other comments, explanations or apologies. Enclose each triplet string in single quotes, ensuring NO internal single or double quotes.
 
 Here are some examples (pay attention to answer structure and format):
 {few_shot_examples}

@@ -13,6 +13,7 @@ numpy = "^2.0.1"
 ollama = "^0.3.0"
 matplotlib = "^3.9.1"
 networkx = "^3.3"
+pymupdf = "^1.24.9"
 
 
 [tool.poetry.group.dev.dependencies]
