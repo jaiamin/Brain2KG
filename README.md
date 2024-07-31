@@ -30,7 +30,7 @@ poetry install
 
 ## Usage Instructions
 
-Run Brain2KG by executing `python run.py --options`:
+Run Brain2KG by executing `poetry run python run.py --options`:
 
 ```bash
 poetry run python run.py \
