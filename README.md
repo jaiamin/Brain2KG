@@ -1,4 +1,4 @@
-<h1>Brain2KG: A Multi-Agent Framework for Neuroscience Knowledge Graph Generation</h1>
+<h1>Brain2KG: A Multi-Agent Framework for KG Construction from Neuroscience Documents</h1>
 
 <img src="assets/brain2kg-diagram.png" alt="Brain2KG Pipeline Diagram" style="width:100%"/>
 
