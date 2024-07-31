@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 nltk = "^3.8.1"
 sentence-transformers = "^3.0.1"
 numpy = "^2.0.1"
