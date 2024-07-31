@@ -45,6 +45,14 @@ poetry run python run.py \
     --output_dir {output_dir}
 ```
 
+You can also run an example using WebNLG ontology:
+
+```bash
+poetry run python run.py
+```
+
+<i>Note: Custom prompts can be set for each agent, though this is not recommended.</i>
+
 ## Checklist
 
 - [ ] Replace `ollama` instruct and embedding components with `transformers`
