@@ -3,7 +3,7 @@ import csv
 import pathlib
 
 import nltk
-nltk.download('punkt')
+nltk.download('punkt', quiet=True)
 from nltk.tokenize import sent_tokenize
 
 from tqdm import tqdm
@@ -104,8 +104,9 @@ class EDA:
         self,
         input_text_list: list[str],
     ):
-        oie_triplets_list = []
+        oie_triplets_dict = {}
         
+        skipped_count = 0
         oie_prompt_template_str = open(self.oie_prompt_template_file_path).read()
         oie_few_shot_examples_str = open(self.oie_few_shot_example_file_path).read()
         for idx in tqdm(range(len(input_text_list)), desc='Extracting'):
@@ -115,8 +116,13 @@ class EDA:
                 oie_prompt_template_str,
                 oie_few_shot_examples_str,
             )
-            oie_triplets_list.append(oie_triplets)
-        logger.info('All sentences extracted.')
+            if oie_triplets is not None:
+                oie_triplets_dict[input_text] = oie_triplets
+            else:
+                skipped_count += 1
+        logger.info('Sentences extracted.')
+        if skipped_count:
+            logger.info(f'{skipped_count} triplets skipped due to parsing issues.')
 
         schema_definition_dict_list = []
         schema_definition_few_shot_prompt_template_str = open(self.sd_template_file_path).read()
@@ -125,9 +131,9 @@ class EDA:
         schema_definition_relevant_relations_dict = {}
 
         # define the relations in the induced open schema
-        for idx, oie_triplets in enumerate(tqdm(oie_triplets_list, desc='Defining')):
+        for idx, (input_text, oie_triplets) in enumerate(tqdm(oie_triplets_dict.items(), desc='Defining')):
             schema_definition_dict = self.definer.define_schema(
-                input_text_list[idx],
+                input_text,
                 oie_triplets,
                 schema_definition_few_shot_prompt_template_str,
                 schema_definition_few_shot_examples_str,
@@ -146,7 +152,7 @@ class EDA:
 
         # Target Alignment
         aligned_triplets_list = []
-        for idx, oie_triplets in enumerate(tqdm(oie_triplets_list, desc='Aligning')):
+        for idx, (input_text, oie_triplets) in enumerate(tqdm(oie_triplets_dict.items(), desc='Aligning')):
             aligned_triplets = []
             for oie_triplet in oie_triplets:
                 relation = oie_triplet[1]
@@ -156,7 +162,7 @@ class EDA:
                     aligned_triplet = [oie_triplet[0], relation, oie_triplet[2]]
                 else:
                     aligned_triplet = self.aligner.llm_verify(
-                        input_text_list[idx],
+                        input_text,
                         oie_triplet,
                         schema_definition_dict_list[idx][relation],
                         schema_aligner_prompt_template_str,
@@ -167,4 +173,4 @@ class EDA:
             aligned_triplets_list.append(aligned_triplets)
         logger.info('All sentences aligned.')
 
-        return oie_triplets_list, schema_definition_dict_list, aligned_triplets_list
+        return oie_triplets_dict.keys(), schema_definition_dict_list, aligned_triplets_list

@@ -12,10 +12,12 @@ def parse_raw_triplets(raw_triplets: str):
     raw_triplets = raw_triplets.replace('"', "'") # replace double with single quotes
     inner_string_pattern = r"(?<!\[)(?<!',)\'(?!,')(?!\])"
     raw_triplets = re.sub(inner_string_pattern, '', raw_triplets) # remove inner string quotes
+    
     while raw_triplets and not raw_triplets.startswith('['):
         raw_triplets = raw_triplets[1:]
     while raw_triplets and not raw_triplets.endswith(']'):
         raw_triplets = raw_triplets[:-1]
+    
     raw_triplets_len = len(raw_triplets)
     if raw_triplets_len > 2 and not raw_triplets.startswith("[['"):
         raw_triplets = re.sub(r"^\[\[*'", "[['", raw_triplets)
@@ -38,7 +40,15 @@ def parse_raw_triplets(raw_triplets: str):
             logger.error('Triplet does not contain exactly 3 elements.')
             raw_triplets = _fallback_triplet_parser(raw_triplets)
             logger.debug(f'INCORRECT TRIPLET (2ND FALLBACK): {triplet}')
-            structured_triplets = ast.literal_eval(raw_triplets)
+            try:
+                structured_triplets = ast.literal_eval(raw_triplets)
+                for t in structured_triplets:
+                    assert len(t) == 3
+            except Exception as e:
+                logger.error(str(e))
+                logger.debug(f'STRUCTURED TRIPLET: {structured_triplets}')
+                logger.info('Triplet above will not be used due to parsing issues.')
+                return None
             break
 
     return structured_triplets

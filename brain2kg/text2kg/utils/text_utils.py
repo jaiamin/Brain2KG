@@ -15,3 +15,6 @@ def pdf_to_text(input_text_file_path: str):
         text = chr(12).join([page.get_text() for page in doc])
 
     return text
+
+def pronoun_to_noun(text: str):
+    pass # convert pronouns to nouns in each sentence

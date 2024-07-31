@@ -1,0 +1,1 @@
+# script that considers ontology objects and relations to define relations accordingly and conver to CSV
