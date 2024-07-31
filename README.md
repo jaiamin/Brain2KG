@@ -33,7 +33,7 @@ poetry install
 Run Brain2KG by executing `python run.py --options`:
 
 ```bash
-python run.py \
+poetry run python run.py \
     --oie_llm {oie_llm} \
     --oie_few_shot_example_file_path {oie_few_shot_example_file_path} \
     --sd_llm {sd_llm} \
