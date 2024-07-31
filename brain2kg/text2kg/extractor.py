@@ -37,5 +37,7 @@ class TripletExtractor:
         )['message']['content']
         logger.debug(f'RAW OUTPUT: {completion}')
         extracted_triplets_list = parse_raw_triplets(completion)
+        if not extracted_triplets_list:
+            return None
         logger.debug(f'STRUCTURED: {extracted_triplets_list}')
         return extracted_triplets_list

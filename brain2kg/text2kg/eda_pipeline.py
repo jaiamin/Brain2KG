@@ -138,7 +138,7 @@ class EDA:
         # Define the relations in the induced open schema
         definition_skipped_count = 0
         pbar = tqdm(total=len(oie_triplets_dict), desc='Defining', bar_format=BAR_FORMAT)
-        for input_text, oie_triplets in tqdm(oie_triplets_dict.items(), desc='Defining'):
+        for input_text, oie_triplets in oie_triplets_dict.items():
             pbar.set_postfix_str(str(definition_skipped_count))
             schema_definition_dict = self.definer.define_schema(
                 input_text,

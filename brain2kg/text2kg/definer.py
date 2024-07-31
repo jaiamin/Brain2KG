@@ -49,5 +49,7 @@ class SchemaDefiner:
         logger.debug(f'RAW OUTPUT: {completion}')
         logger.debug(f'PROMPT: {filled_prompt}')
         relation_definition_dict = parse_relation_definition(completion, relations_present)
+        if not relation_definition_dict:
+            return None
         logger.debug(f'STRUCTURED: {relation_definition_dict}')
         return relation_definition_dict
