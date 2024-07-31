@@ -89,7 +89,8 @@ class SchemaAligner:
         if letter in choice_letters_list:
             canonicalized_triplet[1] = candidate_relations[choice_letters_list.index(verification_result[0])]
         else:
-            return None
+            # if LLM output error or parsing issue, select top choice
+            canonicalized_triplet[1] = candidate_relations[choice_letters_list[0]] # A
         
         logger.debug(f'FINAL TRIPLET: {canonicalized_triplet}')
         return canonicalized_triplet

@@ -1,5 +1,6 @@
 import os
 import csv
+import copy
 import pathlib
 
 import nltk
@@ -136,6 +137,7 @@ class EDA:
         schema_definition_relevant_relations_dict = {}
 
         # Define the relations in the induced open schema
+        oie_triplets_dict_copy = copy.deepcopy(oie_triplets_dict)
         definition_skipped_count = 0
         pbar = tqdm(total=len(oie_triplets_dict), desc='Defining', bar_format=BAR_FORMAT)
         for input_text, oie_triplets in oie_triplets_dict.items():
@@ -150,7 +152,7 @@ class EDA:
                 schema_definition_dict_list.append(schema_definition_dict)
             else:
                 definition_skipped_count += 1
-                del oie_triplets_dict[input_text]
+                del oie_triplets_dict_copy[input_text]
                 pbar.update(1)
                 continue
 
@@ -170,7 +172,7 @@ class EDA:
 
         # Target Alignment
         aligned_triplets_list = []
-        for idx, (input_text, oie_triplets) in enumerate(tqdm(oie_triplets_dict.items(), desc='Aligning')):
+        for idx, (input_text, oie_triplets) in enumerate(tqdm(oie_triplets_dict_copy.items(), desc='Aligning')):
             aligned_triplets = []
             for oie_triplet in oie_triplets:
                 relation = oie_triplet[1]
@@ -191,4 +193,4 @@ class EDA:
             aligned_triplets_list.append(aligned_triplets)
         logger.info('Sentences aligned.')
 
-        return oie_triplets_dict.keys(), schema_definition_dict_list, aligned_triplets_list
+        return oie_triplets_dict_copy.keys(), schema_definition_dict_list, aligned_triplets_list

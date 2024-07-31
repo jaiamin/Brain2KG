@@ -7,7 +7,9 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     # OIE module setting
     parser.add_argument(
-        '--oie_llm', default='llama3.1', help='LLM used for open information extraction.'
+        '--oie_llm', 
+        default='llama3.1', 
+        help='LLM used for open information extraction.',
     )
     parser.add_argument(
         '--oie_prompt_template_file_path',
@@ -24,7 +26,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--sd_llm', 
         default='llama3.1', 
-        help='LLM used for schema definition.'
+        help='LLM used for schema definition.',
     )
     parser.add_argument(
         '--sd_prompt_template_file_path',
@@ -70,7 +72,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--output_dir', 
         default='./examples/outputs', 
-        help='Directory to output to.'
+        help='Directory to output to.',
     )
 
     args = parser.parse_args()
