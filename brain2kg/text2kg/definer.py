@@ -17,7 +17,7 @@ class SchemaDefiner:
             extracted_triplets_list: list[list[str]],
             prompt_template_str: str,
             few_shot_examples_str: str = None,
-    ) -> list[list[str]]:
+    ) -> dict:
         
         relations_present = set()
         for t in extracted_triplets_list:

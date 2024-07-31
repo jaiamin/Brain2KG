@@ -14,6 +14,7 @@ from brain2kg.text2kg.extractor import TripletExtractor
 from brain2kg.text2kg.definer import SchemaDefiner
 from brain2kg.text2kg.aligner import SchemaAligner
 
+BAR_FORMAT = '{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining},{rate_fmt}{postfix} failed] '
 logger = get_logger(__name__)
 
 
@@ -106,10 +107,12 @@ class EDA:
     ):
         oie_triplets_dict = {}
         
-        skipped_count = 0
+        extraction_skipped_count = 0
         oie_prompt_template_str = open(self.oie_prompt_template_file_path).read()
         oie_few_shot_examples_str = open(self.oie_few_shot_example_file_path).read()
-        for idx in tqdm(range(len(input_text_list)), desc='Extracting'):
+        pbar = tqdm(total=len(input_text_list), desc='Extracting', bar_format=BAR_FORMAT)
+        for idx in range(len(input_text_list)):
+            pbar.set_postfix_str(str(extraction_skipped_count))
             input_text = input_text_list[idx]
             oie_triplets = self.extractor.extract(
                 input_text,
@@ -119,10 +122,12 @@ class EDA:
             if oie_triplets is not None:
                 oie_triplets_dict[input_text] = oie_triplets
             else:
-                skipped_count += 1
+                extraction_skipped_count += 1
+            pbar.update(1)
+        pbar.close()
         logger.info('Sentences extracted.')
-        if skipped_count:
-            logger.info(f'{skipped_count} triplets skipped due to parsing issues.')
+        if extraction_skipped_count:
+            logger.info(f'{extraction_skipped_count} triplets skipped due to parsing issues.')
 
         schema_definition_dict_list = []
         schema_definition_few_shot_prompt_template_str = open(self.sd_template_file_path).read()
@@ -130,15 +135,24 @@ class EDA:
 
         schema_definition_relevant_relations_dict = {}
 
-        # define the relations in the induced open schema
-        for idx, (input_text, oie_triplets) in enumerate(tqdm(oie_triplets_dict.items(), desc='Defining')):
+        # Define the relations in the induced open schema
+        definition_skipped_count = 0
+        pbar = tqdm(total=len(oie_triplets_dict), desc='Defining', bar_format=BAR_FORMAT)
+        for input_text, oie_triplets in tqdm(oie_triplets_dict.items(), desc='Defining'):
+            pbar.set_postfix_str(str(definition_skipped_count))
             schema_definition_dict = self.definer.define_schema(
                 input_text,
                 oie_triplets,
                 schema_definition_few_shot_prompt_template_str,
                 schema_definition_few_shot_examples_str,
             )
-            schema_definition_dict_list.append(schema_definition_dict)
+            if schema_definition_dict is not None:
+                schema_definition_dict_list.append(schema_definition_dict)
+            else:
+                definition_skipped_count += 1
+                del oie_triplets_dict[input_text]
+                pbar.update(1)
+                continue
 
             for relation, relation_definition in schema_definition_dict.items():
                 schema_definition_relevant_relations = self.aligner.retrieve_relevant_relations(
@@ -146,7 +160,11 @@ class EDA:
                     top_k=5,
                 )
                 schema_definition_relevant_relations_dict[relation] = schema_definition_relevant_relations
-        logger.info('All sentences defined and relations found.')
+            pbar.update(1)
+        pbar.close()
+        logger.info('Sentences defined and relations found.')
+        if definition_skipped_count:
+            logger.info(f'{definition_skipped_count} definitions skipped due to parsing issues.')
 
         schema_aligner_prompt_template_str = open(self.sa_template_file_path).read()
 
@@ -171,6 +189,6 @@ class EDA:
                 if aligned_triplet is not None:
                     aligned_triplets.append(aligned_triplet)
             aligned_triplets_list.append(aligned_triplets)
-        logger.info('All sentences aligned.')
+        logger.info('Sentences aligned.')
 
         return oie_triplets_dict.keys(), schema_definition_dict_list, aligned_triplets_list
