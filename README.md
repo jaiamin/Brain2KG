@@ -1,4 +1,6 @@
-## Brain2KG
+<h1 align="center">Brain2KG</h1>
+
+<img src="assets/brain2kg-diagram.png" alt="Brain2KG Pipeline Diagram" style="width:100%"/>
 
 ### Pipeline
 
