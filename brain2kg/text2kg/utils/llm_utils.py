@@ -44,7 +44,7 @@ def parse_raw_triplets(raw_triplets: str):
     return structured_triplets
 
 def _fallback_triplet_parser(incorrect_raw_triplets: str):
-    brackets_pattern = r'\]+(\s|,)*\[+'
+    brackets_pattern = r'\]+(\s|,|;|.)*\[+'
     raw_triplets = re.sub(brackets_pattern, '],[', incorrect_raw_triplets, flags=re.DOTALL)
     return raw_triplets
 
