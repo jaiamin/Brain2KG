@@ -6,7 +6,7 @@ from brain2kg import get_logger
 logger = get_logger(__name__)
 
 
-# Hugging Face inference and embeddings
+# Hugging Face/Transformers inference and embeddings
 
 def hf_ner_extraction():
     pass
