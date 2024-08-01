@@ -4,6 +4,11 @@
 # Local test notebooks
 *test.ipynb
 
+# Ollama
+ollama
+id_ed25519*
+*pub
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
