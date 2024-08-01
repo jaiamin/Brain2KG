@@ -5,8 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
-      - 5678:5678
+      - '8000:8000'
+      - '5678:5678'
     restart: always
     depends_on:
       - ollama
@@ -20,7 +20,7 @@ services:
     container_name: ollama
     image: ollama/ollama:latest
     ports:
-      - 11434:11434
+      - '11434:11434'
     volumes:
       - ./ollama:/root/.ollama
       - ~/.ollama/models:/root/.ollama/models
@@ -35,7 +35,7 @@ services:
     container_name: db
     image: postgres:latest
     ports:
-      - 5432:5432
+      - '5432:5432'
     volumes: 
       - db:/var/lib/postgresql/data
     env_file: 
