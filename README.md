@@ -1,10 +1,10 @@
 <h1>Brain2KG: A Multi-Agent Framework for Neuroscience Knowledge Graph Construction</h1>
 
-<img src="assets/brain2kg-diagram.png" alt="Brain2KG Pipeline Diagram" style="width:100%"/>
+<img src="assets/brain2kg-diagram.png" alt="Brain2KG Framework Diagram" style="width:100%"/>
 
 ## Brain2KG Overview
 
-This pipeline leverages multiple agents to process neuroscience documents, extracting, defining, and aligning triplet relations with a predefined ontology. The result is a knowledge graph (KG) that is consistent with the given ontology, ensuring accurate representation of the extracted information.
+This framework leverages multiple agents to process neuroscience documents, extracting, defining, and aligning triplet relations with a predefined ontology. The result is a knowledge graph (KG) that is consistent with the given ontology, ensuring accurate representation of the extracted information.
 
 ## Framework Stages
 
@@ -20,27 +20,30 @@ The second stage involves defining and retrieving relevant relations for the ext
 
 In the final stage, the defined triplets are aligned with the predefined ontology. The LLM agent selects the best matching relations from the ontology for each triplet. If an exact match is not found, the agent chooses the closest relevant relation. This process ensures that the triplets are consistent with the given ontology, resulting in an ontology-aligned knowledge graph (KG) that accurately represents the extracted information.
 
-## Dependencies
+## Usage Instructions
 
-Install requirements using a poetry environment:
+### Via `run.py`
+
+Install requirements using a Poetry environment:
 
 ```bash
 poetry install
 ```
 
-## Usage Instructions
-
-Run Brain2KG by executing `poetry run python run.py --options`:
+Run Brain2KG EDA framework by executing `poetry run python run.py --options`:
 
 ```bash
 poetry run python run.py \
     --oie_llm {oie_llm} \
+    --oie_prompt_template_file_path {oie_prompt_template_file_path} \
     --oie_few_shot_example_file_path {oie_few_shot_example_file_path} \
     --sd_llm {sd_llm} \
+    --sd_prompt_template_file_path {sd_prompt_template_file_path} \
     --sd_few_shot_example_file_path {sd_few_shot_example_file_path} \
     --sa_target_schema_file_path {sa_target_schema_file_path} \
     --sa_llm {sa_llm} \
     --sa_embedding_model {sa_embedding_model} \
+    --sa_prompt_template_file_path {sa_prompt_template_file_path} \
     --input_text_file_path {input_text_file_path} \
     --output_dir {output_dir}
 ```
@@ -51,8 +54,45 @@ You can also run an example using WebNLG ontology:
 poetry run python run.py
 ```
 
+### Via FastAPI endpoints 
+
+Run a docker container by executing `docker-compose.yml` file:
+
+```bash
+docker compose up --build
+```
+
+To test the Brain2KG EDA framework via endpoint, either navigate to `http://localhost:8000/docs` or make a curl request:
+
+```bash
+curl -X 'GET' \
+  'http://localhost:8000/eda' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "oie_settings": {
+    "oie_llm": {oie_llm},
+    "oie_prompt_template_file_path": {oie_prompt_template_file_path},
+    "oie_few_shot_example_file_path": {oie_few_shot_example_file_path}
+  },
+  "sd_settings": {
+    "sd_llm": {sd_llm},
+    "sd_prompt_template_file_path": {sd_prompt_template_file_path},
+    "sd_few_shot_example_file_path": {sd_few_shot_example_file_path}
+  },
+  "sa_settings": {
+    "sa_target_schema_file_path": {sa_target_schema_file_path},
+    "sa_llm": {sa_llm},
+    "sa_embedding_model": {sa_embedding_model},
+    "sa_prompt_template_file_path": {sa_prompt_template_file_path}
+  },
+  "input_file_path": {
+    "input_text_file_path": {input_text_file_path}
+  },
+  "output_dir_path": {
+    "output_dir": {output_dir}
+  }
+}'
+```
+
 <i>Note: Custom prompts can be set for each agent, though this is not recommended.</i>
-
-## Checklist
-
-- [ ] Replace `ollama` instruct and embedding components with `transformers`

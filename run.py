@@ -65,7 +65,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--input_text_file_path',
         default='./data/raw_text/webnlg_dataset.txt',
-        help='File containing input texts to extract KG from, each line contains one piece of text.',
+        help='File containing input texts to extract KG from.',
     )
 
     # Output setting

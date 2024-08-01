@@ -66,6 +66,7 @@ class EDA:
         input_text_file_path: str,
         output_dir: str = None,
     ):
+        pbar = tqdm(total=3, desc='Preprocessing')
         if output_dir is not None:
             pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
         if not input_text_file_path:
@@ -80,13 +81,17 @@ class EDA:
             logger.debug(f'PDF EXTRACTED TEXT: {input_raw_text}')
         else:
             raise ValueError('Input text file path must be a supported type.')
+        pbar.update(1)
 
         # preprocess text
         input_raw_text = preprocess_text(input_raw_text)
+        pbar.update(1)
 
         # sentence tokenize input text
         sentences = sent_tokenize(input_raw_text)
         logger.info('Input text sentence tokenized.')
+        pbar.update(1)
+        pbar.close()
 
         output_kg_list = []
         # EDA run

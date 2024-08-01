@@ -6,6 +6,10 @@ from brain2kg import get_logger
 logger = get_logger(__name__)
 
 
+# hugging face inference for LLMs
+
+
+
 def parse_raw_triplets(raw_triplets: str):
     # handle regular incorrect LLM outputs\
     raw_triplets = re.sub(r'\s', '', raw_triplets) # remove all whitespace characters
