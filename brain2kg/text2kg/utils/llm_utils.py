@@ -6,9 +6,16 @@ from brain2kg import get_logger
 logger = get_logger(__name__)
 
 
-# hugging face inference for LLMs
+# Hugging Face inference and embeddings
 
+def hf_ner_extraction():
+    pass
 
+def hf_llm_instruct():
+    pass
+
+def hf_generate_embeddings():
+    pass
 
 def parse_raw_triplets(raw_triplets: str):
     # handle regular incorrect LLM outputs\
