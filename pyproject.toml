@@ -16,8 +16,12 @@ networkx = "^3.3"
 pymupdf = "^1.24.9"
 transformers = "^4.43.3"
 torch = "^2.4.0"
-fastapi = "^0.111.1"
 uvicorn = "^0.30.4"
+python-jose = "^3.3.0"
+passlib = "^1.7.4"
+asyncpg = "^0.29.0"
+fastapi = "^0.111.1"
+asgi-correlation-id = "^4.3.2"
 
 
 [tool.poetry.group.dev.dependencies]

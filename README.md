@@ -56,7 +56,27 @@ poetry run python run.py
 
 ### Via FastAPI endpoints 
 
-Run a docker container by executing `docker-compose.yml` file:
+Create an `.env.development` file in the `brain2kg/api/` directory containing:
+
+```
+ENV_STATE=dev
+DATABASE_URL=sqlite:///data.db
+DB_FORCE_ROLL_BACK=False
+LOGTAIL_API_KEY=
+JWT_POSTGRES_DATABASE_PORT=
+JWT_POSTGRES_DATABASE_USER=
+JWT_POSTGRES_DATABASE_PASSWORD=
+JWT_POSTGRES_TABLE_USER_SCOPE_REL=
+JWT_POSTGRES_DATABASE_NAME=
+JWT_POSTGRES_TABLE=
+JWT_POSTGRES_DATABASE_HOST_URL=localhost
+JWT_POSTGRES_TABLE_USER=
+JWT_POSTGRES_TABLE_SCOPE=
+JWT_ALGORITHM=
+JWT_SECRET_KEY=
+```
+
+Run the Docker containers by executing the `docker-compose.yml` file:
 
 ```bash
 docker compose up --build

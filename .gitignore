@@ -9,6 +9,9 @@ ollama
 id_ed25519*
 *pub
 
+# API
+.env*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
