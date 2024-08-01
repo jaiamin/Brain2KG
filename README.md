@@ -54,6 +54,17 @@ You can also run an example using WebNLG ontology:
 poetry run python run.py
 ```
 
+Or a custom neuroscience-domain example using `gemma2:9b` LLM agents:
+
+```bash
+poetry run python run.py \
+    --oie_llm gemma2:9b \
+    --sd_llm gemma2:9b \
+    --sa_target_schema_file_path schemas/neuro_schema.csv \
+    --sa_llm gemma2:9b \
+    --input_text_file_path data/raw_text/neuro_data.txt
+```
+
 ### Via FastAPI endpoints 
 
 Create an `.env.development` file in the `brain2kg/api/` directory containing:
