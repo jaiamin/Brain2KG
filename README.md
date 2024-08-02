@@ -1,4 +1,4 @@
-<h1>Brain2KG: A Multi-Agent Framework for Neuroscience Knowledge Graph Construction</h1>
+<h1>Brain2KG: A Multi-Agent Framework for Neuroscience Knowledge Graph Construction & Validation</h1>
 
 <img src="assets/brain2kg-diagram.png" alt="Brain2KG Framework Diagram" style="width:100%"/>
 
@@ -19,6 +19,10 @@ The second stage involves defining and retrieving relevant relations for the ext
 ### SA: Schema Alignment
 
 In the final stage, the defined triplets are aligned with the predefined ontology. The LLM agent selects the best matching relations from the ontology for each triplet. If an exact match is not found, the agent chooses the closest relevant relation. This process ensures that the triplets are consistent with the given ontology, resulting in an ontology-aligned knowledge graph (KG) that accurately represents the extracted information.
+
+### KGV: Knowledge Graph Validation
+
+WIP
 
 ## Usage Instructions
 
